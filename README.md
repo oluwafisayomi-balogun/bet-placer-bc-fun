@@ -9,7 +9,6 @@ It currently supports single bets (`1/1`) and combo/system bets (`2/2`, `2/3`, e
 
 The script uses environment variables for sensitive information:
 
-- `BRAND_ID`: Brand identifier.
 - `TOKEN`: Bearer token for authentication.  
 - `.env` file keeps sensitive information outside source code.  
 
@@ -39,7 +38,7 @@ Accepts a dictionary containing bet details, builds the appropriate JSON payload
 ### Endpoint
 **POST**  
 ```
-[https://api-k-c7818b61-623.sptpub.com/api/v2/coupon/brand/BRAND_ID HERE/bet/place]
+[https://api-k-c7818b61-623.sptpub.com/api/v2/coupon/brand/2103509236163162112/bet/place]
 
 ````
 
