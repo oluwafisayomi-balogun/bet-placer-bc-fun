@@ -44,7 +44,7 @@ Accepts a dictionary containing bet details, builds the appropriate JSON payload
 
 Authentication requires a **Bearer token (JWT)** in the request headers.
 
-### Example Request Payload
+### Example Request Payload without specifier
 
 ```json
 [
@@ -100,6 +100,63 @@ Authentication requires a **Bearer token (JWT)** in the request headers.
 
 ---
 
+### Example Request Payload with specifier
+
+```json
+[
+  {
+    "type": "1/1",
+    "sum": "150",
+    "k": "1.93",
+    "global_id": null,
+    "bonus_id": null,
+    "bet_request_id": "2582835422824632349-189-total=19.5-12",
+    "odds_change": "higher",
+    "selections": [
+      {
+        "event_id": "2582835422824632349",
+        "market_id": "189",
+        "specifiers": "total=19.5",
+        "outcome_id": "12",
+        "k": "1.93",
+        "bonus_id": null,
+        "promo_id": null,
+        "source": {
+          "layout": "tile",
+          "page": "/:sportSlug/:categorySlug/:tournamentSlug/:eventSlugAndId",
+          "section": "",
+          "extra": {
+            "market": "ALL",
+            "timeFilter": "",
+            "banner_type": "",
+            "tab": ""
+          }
+        }
+      }
+    ],
+    "timestamp": 1758821729884
+  }
+]
+````
+### Example Response with specifier(Success) 
+
+```json
+{
+    "accepted": [
+        {
+            "bet_request_id": "2582835422824632349-189-total=19.5-12",
+            "bet_id": "2583051337088512737",
+            "bonus_id": null
+        }
+    ],
+    "error": []
+}
+```
+
+
+
+
+
 ## 5. Example Bet Data
 
 ### Single Bet (`1/1`)
@@ -137,7 +194,7 @@ as seen on the Developer tools
 * `k`: Odds value.
 * `type`: Bet type or wager type (e.g. `"1/1"` for single bets).
 * `event_id`, `market_id`, `outcome_id`: Identify the bet selection.
-* `bet_request_id`: Unique identifier for this bet (format: `<event_id>-<market_id>--<outcome_id>`).
+* `bet_request_id`: Unique identifier for this bet (format: `<event_id>-<market_id>-<specifier>-<outcome_id>`).
 * `specifier`: Extras you can bet on
 * Response includes a unique `bet_id` if accepted.
 
