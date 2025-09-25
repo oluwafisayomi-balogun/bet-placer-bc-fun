@@ -70,7 +70,7 @@ Fields:
 ### 7. Clarifications/Limitations
 **Token Management**: The script does not perform login and relies on a pre-obtained JWT token. Login is handled manually, and the JWT token is extracted from browser storage. Since tokens may expire, you must manually update the environment variables with the new JWT token before running the script.
 
-- **Manual Bet Data Input**: Currently, the `bet_data` dictionary must be manually provided for each bet. The script does not automatically fetch bet details.
+**Manual Bet Data Input**: Currently, the `bet_data` dictionary must be manually provided for each bet. The script does not automatically fetch bet details.
 
 
 
