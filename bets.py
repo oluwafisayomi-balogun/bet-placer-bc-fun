@@ -34,11 +34,11 @@ def place_bet(bet_data):
     bet_type = bet_data['bet_type']
     try:
         if bet_type == "1/1":
-            bet_request_id = f"{bet_data['event_id']}-{bet_data['market_id']}--{bet_data['outcome_id']}"
+            bet_request_id = f"{bet_data['event_id']}-{bet_data['market_id']}-{sel['specifiers']}-{bet_data['outcome_id']}"
         else: #for combo & system bets
             if "selections" not in bet_data or not bet_data['selections']:
                 raise ValueError("Missing selections for combo/system bet")
-            bet_request_id = ":".join(f"{sel['event_id']}-{sel['market_id']}--{sel['outcome_id']}" for sel in bet_data['selections'])
+            bet_request_id = ":".join(f"{sel['event_id']}-{sel['market_id']}-{sel['specifiers']}-{sel['outcome_id']}" for sel in bet_data['selections'])
     except Exception as e:
         print(f"Logic for {bet_type} hasn't been implemented yet: {e}")
             
