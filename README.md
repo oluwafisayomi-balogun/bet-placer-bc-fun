@@ -17,7 +17,7 @@ The script uses environment variables for sensitive information:
 ## 2. Features
 
 - **Multiple Bet Types:** Single (`1/1`) and combo/system (`2/2`, `2/3`, etc.).  
-- **Input Validation:** Ensures required fields (`event_id`, `market_id`, `outcome_id`, `stake_amount`, `odds`) are provided.  
+- **Input Validation:** Ensures required fields (`event_id`, `market_id`, `outcome_id`, `stake_amount`, `odds`, `specifier`) are provided.  
 - **Error Handling:** Handles HTTP errors, timeouts, connection issues, and invalid JSON responses.  
 - **Bearer Token Authentication:** No session management required.  
 
@@ -104,7 +104,7 @@ Authentication requires a **Bearer token (JWT)** in the request headers.
 
 ### Single Bet (`1/1`)
 
-Represents a single bet with event, market, outcome, stake, and odds.
+Represents a single bet with event, market, outcome, stake, specfier and odds.
 IDs are captured from **browser DevTools network requests**.
 
 **Fields:**
@@ -112,9 +112,10 @@ IDs are captured from **browser DevTools network requests**.
 * `event_id`: Unique identifier for the match/event.
 * `market_id`: Identifier for the bet market.
 * `outcome_id`: Identifier for the specific betting outcome.
-* `bet_type_specifier`: Type of bet.
+* `bet_type`: Type of bet\wager.
 * `stake_amount`: Amount wagered.
 * `odds`: Odds applied to this bet.
+* `specifier`: extra details that define this bet.
 
 ---
 
@@ -122,9 +123,10 @@ IDs are captured from **browser DevTools network requests**.
 
 Represents multiple selections combined into one bet.
 
-* `selections`: Array of individual bets, each with `event_id`, `market_id`, `outcome_id`, `odds`.
-* `bet_type_specifier`: e.g. `"2/2"` for a two-selection combo bet.
+* `selections`: Array of individual bets, each with `event_id`, `market_id`, `outcome_id`, `odds`, `specifiers`.
+* `bet_type`: e.g. `"2/2"` for a two-selection combo bet.
 * `stake_amount` and `odds`: Represent total stake and combined odds.
+* `specifier`: e.g hcp
 
 ---
 
@@ -133,9 +135,10 @@ as seen on the Developer tools
 
 * `sum`: Stake amount.
 * `k`: Odds value.
-* `type`: Bet type specifier (e.g. `"1/1"` for single bets).
+* `type`: Bet type or wager type (e.g. `"1/1"` for single bets).
 * `event_id`, `market_id`, `outcome_id`: Identify the bet selection.
 * `bet_request_id`: Unique identifier for this bet (format: `<event_id>-<market_id>--<outcome_id>`).
+* `specifier`: Extras you can bet on
 * Response includes a unique `bet_id` if accepted.
 
 ---

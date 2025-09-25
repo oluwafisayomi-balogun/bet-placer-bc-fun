@@ -3,18 +3,20 @@ import time
 import os
 from dotenv import load_dotenv
 load_dotenv()
+from datetime import datetime
 
+now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 BASE_URL = "https://api-k-c7818b61-623.sptpub.com"
 BRAND_ID = os.getenv("BRAND_ID")
 TOKEN = os.getenv("TOKEN")
 
 def place_bet(bet_data):
-    for key in ["bet_type_specifier", "stake_amount", "odds"]:
+    for key in ["bet_type", "stake_amount", "odds"]:
         if key not in bet_data:
             return {"error": f"Missing required field: {key}"}
 
     # Check based on bet type
-    if bet_data["bet_type_specifier"] == "1/1":
+    if bet_data["bet_type"] == "1/1":
         for key in ["event_id", "market_id", "outcome_id"]:
             if key not in bet_data:
                 return {"error": f"Missing required field for single bet: {key}"}
@@ -23,13 +25,13 @@ def place_bet(bet_data):
             return {"error": "Missing 'selections' for combo/system bet"}
         #also check that each selection has event_id, market_id, outcome_id
         for sel in bet_data["selections"]:
-            for field in ["event_id", "market_id", "outcome_id"]:
+            for field in ["event_id", "market_id", "outcome_id", "specifiers"]:
                 if field not in sel:
                     return {"error": f"Missing '{field}' in one of the selections"}
 
     url = f"{BASE_URL}/api/v2/coupon/brand/{BRAND_ID}/bet/place"
     
-    bet_type = bet_data['bet_type_specifier']
+    bet_type = bet_data['bet_type']
     try:
         if bet_type == "1/1":
             bet_request_id = f"{bet_data['event_id']}-{bet_data['market_id']}--{bet_data['outcome_id']}"
@@ -42,12 +44,12 @@ def place_bet(bet_data):
             
     timestamp = int(time.time() * 1000)
     
-    if bet_data["bet_type_specifier"] == "1/1":
+    if bet_data["bet_type"] == "1/1":
         selections_payload = [
             {
                 "event_id": bet_data["event_id"],
                 "market_id": bet_data["market_id"],
-                "specifiers": "",
+                "specifiers": bet_data["specifiers"],
                 "outcome_id": bet_data["outcome_id"],
                 "k": str(bet_data["odds"]),
                 "source": {
@@ -67,7 +69,7 @@ def place_bet(bet_data):
             selections_payload.append({
                 "event_id": sel["event_id"],
                 "market_id": sel["market_id"],
-                "specifiers": "",
+                "specifiers": sel["specifiers"],
                 "outcome_id": sel["outcome_id"],
                 "k": str(sel["odds"]),
                 "source": {
@@ -83,7 +85,7 @@ def place_bet(bet_data):
 
     payload = [
         {
-            "type": bet_data["bet_type_specifier"],
+            "type": bet_data["bet_type"],
             "sum": str(bet_data["stake_amount"]),
             "k": str(bet_data["odds"]),  # combined odds for combo bets
             "global_id": None,
@@ -124,7 +126,7 @@ bet_data_1 = {
     "event_id": "2574931793602027558",
     "market_id": "1",
     "outcome_id": "2",
-    "bet_type_specifier": "1/1", #this is the single betting
+    "bet_type": "1/1", #this is the single betting
     "stake_amount": 150,
     "odds": 2.9
 }
@@ -145,16 +147,33 @@ bet_data_2 = {
         }],
     "market_id": "1",
     "outcome_id": "1",
-    "bet_type_specifier": "2/2", #this is the combo betting
+    "bet_type": "2/2", #this is the combo betting
     "stake_amount": 150,
     "odds": 3.272
 }
 
+bet_data_3 = {
+    "event_id": "2581553581228429348",
+    "market_id": "18",
+    "outcome_id": "12",
+    "specifiers": "total=2.5",
+    "stake_amount": 200,
+    "odds": 1.68, 
+    "bet_type": "1/1", #I assumed this is a single combo from the task focus
+}
 
 # Test 1
-result1 = place_bet(bet_data_1)
-print("Test 1 result:", result1)
+# result1 = place_bet(bet_data_1)
+# print("Test 1 result:", result1)
 
 # Test 2
-result2 = place_bet(bet_data_2)
-print("Test 2 result:", result2)
+# result2 = place_bet(bet_data_2)
+# print("Test 2 result:", result2)
+
+# NB: Previous tests didn't include a specifier and current updated code won't work on them anymore
+
+# Test 3
+result3 = place_bet(bet_data_3)
+print(f"This test was conducted at {now}")
+print("Test 3 result:", result3)
+
